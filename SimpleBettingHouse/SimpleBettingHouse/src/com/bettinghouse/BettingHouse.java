@@ -1,5 +1,9 @@
 package com.bettinghouse;
-
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -108,6 +112,14 @@ public class BettingHouse {
     public static void successfulSignUp(User user, Person person) {
     	users.put(user, person);
     	System.out.println("You have registered successfully.");
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("register.txt", true))) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String timestamp = dateFormat.format(new Date());
+            writer.write("User: " + user.getNickname() + " - Registered at: " + timestamp);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void logIn(){
@@ -129,6 +141,14 @@ public class BettingHouse {
     
     public static void effectiveLogIn(User user){
     	System.out.println(user.getNickname() + " have logged in successfully");
+    	try (BufferedWriter writer = new BufferedWriter(new FileWriter("logger.txt", true))) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String timestamp = dateFormat.format(new Date());
+            writer.write("User: " + user.getNickname() + " - Logged in at: " + timestamp);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public static void toDoSomething(){
@@ -139,6 +159,14 @@ public class BettingHouse {
     
     public static void effectiveLogOut(User user){
     	System.out.println(user.getNickname() + " have successfully logged out.");
+    	try (BufferedWriter writer = new BufferedWriter(new FileWriter("logger.txt", true))) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String timestamp = dateFormat.format(new Date());
+            writer.write("User: " + user.getNickname() + " - Logged out at: " + timestamp);
+            writer.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     public static void viewRegisteredIndividuals(){
