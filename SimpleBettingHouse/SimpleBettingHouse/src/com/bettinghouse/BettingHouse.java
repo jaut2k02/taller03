@@ -115,7 +115,7 @@ public class BettingHouse {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("register.txt", true))) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String timestamp = dateFormat.format(new Date());
-            writer.write("User: " + user.getNickname() + " - Registered at: " + timestamp);
+            writer.write("Usuario registrado: " + user.getNickname() + "Fecha: " + timestamp);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -144,7 +144,7 @@ public class BettingHouse {
     	try (BufferedWriter writer = new BufferedWriter(new FileWriter("logger.txt", true))) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String timestamp = dateFormat.format(new Date());
-            writer.write("User: " + user.getNickname() + " - Logged in at: " + timestamp);
+            writer.write("Sesión iniciada por usuario: " + user.getNickname() + " Fecha: " + timestamp);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
@@ -162,7 +162,7 @@ public class BettingHouse {
     	try (BufferedWriter writer = new BufferedWriter(new FileWriter("logger.txt", true))) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String timestamp = dateFormat.format(new Date());
-            writer.write("User: " + user.getNickname() + " - Logged out at: " + timestamp);
+            writer.write("Sesión cerrada por usuario: " + user.getNickname() + " Fecha: " + timestamp);
             writer.newLine();
         } catch (IOException e) {
             e.printStackTrace();
