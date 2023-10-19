@@ -1,29 +1,47 @@
 import java.io.File;
 import java.util.Calendar;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 
-public aspect Looger {
-	public aspect Log {
+import com.bettinghouse.User;
 
-	    File file = new File("log.txt");
-	    Calendar cal = Calendar.getInstance();
-	 
-	    pointcut success() : call(* create*(..) );
-	    after() : success() {
-	    	System.out.println("**** User created ****");
-	    }
+public aspect Loogger {
+	private SimpleDateFormat fecha = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy");
+	pointcut registerUser() : call(* com.bettinghouse.BettingHouse.successfulSignUp(..));
+	after() returning : registerUser() {
+		User user = (User)thisJoinPoint.getArgs()[0];
+		recordAction("Register.txt", user, "Usuario registrado");
+		}
+	private void recordAction(String fileName, User user, String actionType) {
+		File file = new File(fileName);
+		String time = fecha.format(Calendar.getInstance().getTime());
+
+		try (PrintWriter out = new PrintWriter(new FileWriter(file, true))) {
+		String message;
+		if (actionType.equals("Usuario registrado")) {
+		message = actionType + ": " + user.getNickname() + " Fecha: " + time;
+		} else {
+		message = actionType + " por usuario: " + user.getNickname() + " Fecha: " + time;
+		}
+		System.out.println(message);
+		out.println(message);
+		} catch (IOException e) {
+		e.printStackTrace();
+		}
+	}
+	
+	pointcut loginAndLogoutUser() : (call(* com.bettinghouse.BettingHouse.effectiveLogIn(..)) || call(* com.bettinghouse.BettingHouse.effectiveLogOut(..)));
+
+	after() returning : loginAndLogoutUser() {
+		User user = (User)thisJoinPoint.getArgs()[0];
+		if (thisJoinPoint.getSignature().getName().equals("effectiveLogIn")) {
+			recordAction("Log.txt", user, "Sesión iniciada");
+		} else if (thisJoinPoint.getSignature().getName().equals("effectiveLogOut")) {
+			recordAction("Log.txt", user, "Sesión cerrada");
+		}
 	}
 
-
-	public aspect Logger {
-
-	    pointcut success() : call(* create*(..) );
-	    after() : success() {
-	    
-	    	System.out.println("**** User created ****");
-	    }
-	    
-	}
 
 }
-
-
